@@ -12,7 +12,9 @@ const pubIpServices = [primary, secondary, tertiary]
 async function getPubIp () {
     for (const service of pubIpServices) {
         try {
-            const response = await axios.get(service)
+            const response = await axios.get(service, {
+                signal: AbortSignal.timeout(5000) //Aborts request after 5 seconds
+             })
             return {ip: response.data}
 
         } catch (error) {
@@ -20,7 +22,6 @@ async function getPubIp () {
         }
     }
     throw new Error(`999 - All calls to public IP lookup services failed.`)
-
 }
 
 export {getPubIp}

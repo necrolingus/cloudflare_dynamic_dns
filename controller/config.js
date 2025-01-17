@@ -19,5 +19,5 @@ export const config = {
     cloudflareDnsRecordToUpdateProxied: process.env.DDNS_CF_DNS_RECORD_TO_UPDATE_PROXIED || true,
     lookupPublicIpUrlPrimary: "https://api64.ipify.org", //claims no limits
     lookupPublicIpUrlSecondary: "https://icanhazip.com", //claims no limits
-    lookupPublicIpUrlTertiary: "https://ipinfo.io/ip" //50k requests per month ont the free tier
+    lookupPublicIpUrlTertiary: "https://ipinfo.io/ip" //50k requests per month on the free tier
 }
