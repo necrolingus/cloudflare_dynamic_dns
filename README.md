@@ -8,21 +8,53 @@ Spin up this Node.js app in Docker or as a standalone app to have your own secur
 - 👉 Stores your current public IP, your Cloudflare DNS record IP, and any errors in a database for analysis and alerting. You can use your own Postgres Database or spin one up with the app in Docker Compose.
 - 👉 Allows you to set pretty much any parameter using environment variables.
 
+
+<br/>
+
 ### Environment Variables you can set 
 - **DDNS_CF_API_KEY**: Your Cloudflare API key. Only grant the necessary permissions, such as "DNS Edit" on the required Zone.
 - **DDNS_CF_API_URL**: By default it should be https://api.cloudflare.com/client/v4/zones/
 - **DDNS_CF_DB_DATABASENAME**: For example, cloudflare_ddns. To keep things simple, ensure the database name and username use the same values, especially when using Postgres in Docker. If you will be using your own Postgres, specify anything you'd like.
 - **DDNS_CF_DB_DATA_TABLE**: For example, dns_update_history. This is the table name that will automatically be created in your database.
-- **DDNS_CF_DB_DATA_TABLE_CLEANUP_DAYS**: After each iteration, records older than this number of days will be deleted automatically.
-- **DDNS_CF_DB_HOSTNAME**: For example, ddns-cloudflare-db. This is the hostname of your Postgres database.
-- **DDNS_CF_DB_PASSWORD**: Your Postgres user password
-- **DDNS_CF_DB_PORT**: Your Postgres port number.
+- **DDNS_CF_DB_HOSTNAME**: For example, ddns-cloudflare-db. This is the hostname or IP of your Postgres database which can be hosted outside of this Docker compose.
 - **DDNS_CF_DB_USERNAME**: For example, cloudflare_ddns. To keep things simple, ensure the username and database name use the same values, especially when using Postgres in Docker. If you will be using your own Postgres, specify anything you'd like.
+- **DDNS_CF_DB_PASSWORD**: Your database user password
+- **DDNS_CF_DB_PORT**: Your Postgres port number.
+- **DDNS_CF_DB_DATA_TABLE_CLEANUP_DAYS**: After each iteration, records older than this number of days will be deleted automatically.
 - **DDNS_CF_DNS_RECORD_TO_UPDATE**: The domain name you want to update, for example, something.com, or my.site.com
 - **DDNS_CF_DNS_RECORD_TO_UPDATE_PROXIED**: true or false. This specifies if the DNS record should be proxied via Cloudflare.
 - **DDNS_CF_DNS_RECORD_UPDATE_COMMENT**: The comment you want to be added to your DNS record in Cloudflare. Can be anything.
 - **DDNS_CF_UPDATE_SLEEP_SECONDS**: How many seconds the application should check if your public IP and DNS Record IPs are in sync. Can be as low as 30 seconds.
 - **DDNS_CF_ZONE**: The Zone ID of your Cloudflare site.
 
+<br/>
+
+### Quick Docker Compose
+Always check the repo for the latest docker compose, but the below will get you started quickly especially if you are using Portainer.
+```
+services:
+  ddns-cloudflare:
+    image: ghcr.io/necrolingus/cloudflare_dynamic_dns:latest
+    container_name: ddns_cloudflare
+    restart: unless-stopped
+    env_file: stack.env
+    depends_on:
+      - ddns-cloudflare-db
+
+  ddns-cloudflare-db:
+    image: postgres:17.2-alpine3.21
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=$DDNS_CF_DB_USERNAME
+      - POSTGRES_PASSWORD=$DDNS_CF_DB_PASSWORD
+    shm_size: 96mb
+    ports:
+      - "5560:5432" # So the host can get to it
+    volumes:
+      - postgresdataddnscf:/var/lib/postgresql/data
+      
+volumes:
+  postgresdataddnscf:
+```
 
 
