@@ -1,0 +1,14 @@
+DDNS_CF_API_KEY=xxx
+DDNS_CF_API_URL=https://api.cloudflare.com/client/v4/zones/
+DDNS_CF_DB_DATABASENAME=cloudflare_ddns #must be the same as the username for postgres to create the DB automatically
+DDNS_CF_DB_DATA_TABLE=dns_update_history
+DDNS_CF_DB_DATA_TABLE_CLEANUP_DAYS=21
+DDNS_CF_DB_HOSTNAME=ddns-cloudflare-db
+DDNS_CF_DB_PASSWORD=xxx
+DDNS_CF_DB_PORT=5432
+DDNS_CF_DB_USERNAME=cloudflare_ddns
+DDNS_CF_DNS_RECORD_TO_UPDATE=domain.here
+DDNS_CF_DNS_RECORD_TO_UPDATE_PROXIED=true
+DDNS_CF_DNS_RECORD_UPDATE_COMMENT=Updated by my auto DDNS updator program
+DDNS_CF_UPDATE_SLEEP_SECONDS=60
+DDNS_CF_ZONE=xxx

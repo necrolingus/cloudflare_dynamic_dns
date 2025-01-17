@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  ddns-cloudflare:
+    image: ddns_cloudflare:latest
+    container_name: ddns_cloudflare
+    restart: unless-stopped
+    env_file: stack.env
+    depends_on:
+      - ddns-cloudflare-db
+  ddns-cloudflare-db:
+    image: postgres:17.2-alpine3.21
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=$DDNS_CF_DB_USERNAME
+      - POSTGRES_PASSWORD=$DDNS_CF_DB_PASSWORD
+    shm_size: 96mb
+    ports:
+      - "5560:5432" # So the host can get to it
+    volumes:
+      - postgresdataddnscf:/var/lib/postgresql/data
+      
+volumes:
+  postgresdataddnscf:

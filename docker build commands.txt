@@ -1,0 +1,1 @@
+docker build -f dockerfile . --tag ddns_cloudflare:latest --no-cache
