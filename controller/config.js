@@ -10,7 +10,7 @@ export const config = {
     dbUsername: process.env.DDNS_CF_DB_USERNAME,
     dbPassword: process.env.DDNS_CF_DB_PASSWORD,
     dbDataTable: process.env.DDNS_CF_DB_DATA_TABLE,
-    dbDataCleanupDays: process.env.DDNS_CF_DB_DATA_TABLE_CLEANUP_DAYS || 21,
+    dbDataCleanupDays: process.env.DDNS_CF_DB_DATA_TABLE_CLEANUP_DAYS || 30,
     cloudflareHeaders: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'

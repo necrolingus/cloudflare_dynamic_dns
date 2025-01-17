@@ -2,8 +2,14 @@ import {getCfIp} from './services/getCurrentCloudflareIp.js'
 import {getPubIp} from './services/getCurrentPublicIp.js'
 import {updateCfIp} from './services/updateCloudflareIp.js'
 import {config} from './controller/config.js'
-import { delay } from './controller/asyncSleep.js' 
+import {delay} from './controller/asyncSleep.js' 
+import {createOrUpdateTables} from './models/modelSync.js'
+import {ddnsUpdateData} from './models/ddnsUpdateData.js'
+import {cleanupOldData} from './controller/deleteOldData.js'
 
+
+//Create the table if it does not exist
+await createOrUpdateTables()
 
 //Check if the sleep time is good
 const sleepSeconds = config.cfUpdateSleepSeconds
@@ -38,14 +44,25 @@ async function main() {
                 updatedIp = await updateCfIp(pubIp.ip, cfIp.id)
             }
 
+            // Insert the DNS data into the database
+            await ddnsUpdateData.create({publicIp: pubIp.ip, cloudflareIp: cfIp.ip, error: null})
+
         } catch (error) {
+            //Handle potential DB errors
+            try {
+                await ddnsUpdateData.create({ publicIp: null, cloudflareIp: null, error: error.message });
+            } catch (dbError) {
+                console.error("Failed to log error to the database:", dbError.message);
+            }
             console.error(error.message)
             process.exit(1)
         }
-
-        //Call import {cleanupOldData} from './controller/deleteOldData.js'
-        //do DB logging here
-        //Log updatedIp and error to the same table
+        
+        //Clean old data
+        await cleanupOldData()
+        
+        //Just log after this iteration is done
+        console.log(`Process completed. Sleeping for ${sleepSeconds} seconds...`)
 
         //Sleep
         await delay(sleepSeconds * 1000)
