@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   ddns-cloudflare:
-    image: ddns_cloudflare:latest
+    image: ghcr.io/necrolingus/cloudflare_dynamic_dns:latest
     container_name: ddns_cloudflare
     restart: unless-stopped
     env_file: stack.env
