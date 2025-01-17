@@ -11,7 +11,7 @@ import {cleanupOldData} from './controller/deleteOldData.js'
 //Create the table if it does not exist
 await createOrUpdateTables()
 
-//Check if the sleep time is good
+//Define variables
 const sleepSeconds = config.cfUpdateSleepSeconds
 
 //Do some checks
