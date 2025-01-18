@@ -15,7 +15,7 @@ async function getPubIp () {
             const response = await axios.get(service, {
                 signal: AbortSignal.timeout(5000) //Aborts request after 5 seconds
              })
-            return {ip: response.data}
+            return {ip: response.data.trim(), service: service}
 
         } catch (error) {
             console.log(`Failed to fetch public IP from ${service}:`, error.message)

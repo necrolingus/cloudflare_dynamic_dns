@@ -20,7 +20,7 @@ async function getCfIp() {
         const ip = result[0].content
         const id = result[0].id
         if (result.length == 1) {
-            return {ip: ip, id: id}
+            return {ip: ip.trim(), id: id}
         } 
         
     } catch (error) {

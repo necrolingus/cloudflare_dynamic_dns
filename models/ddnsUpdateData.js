@@ -13,6 +13,14 @@ const ddnsUpdateData = sequelize.define(config.dbDataTable, {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    publicIpService: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    updateOutcome: {
+        type: DataTypes.STRING(500),
+        allowNull: true,
+    },
     error: {
         type: DataTypes.STRING(500),
         allowNull: true,

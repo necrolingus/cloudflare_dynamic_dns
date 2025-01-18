@@ -45,12 +45,20 @@ async function main() {
             }
 
             // Insert the DNS data into the database
-            await ddnsUpdateData.create({publicIp: pubIp.ip, cloudflareIp: cfIp.ip, error: null})
+            await ddnsUpdateData.create({publicIp: pubIp.ip, 
+                                        cloudflareIp: cfIp.ip,
+                                        publicIpService: pubIp.service,
+                                        updateOutcome: updatedIp, 
+                                        error: null})
 
         } catch (error) {
             //Handle potential DB errors
             try {
-                await ddnsUpdateData.create({ publicIp: null, cloudflareIp: null, error: error.message });
+                await ddnsUpdateData.create({publicIp: pubIp.ip, 
+                                            cloudflareIp: cfIp.ip,
+                                            publicIpService: null,
+                                            updateOutcome: null, 
+                                            error: error.message})
             } catch (dbError) {
                 console.error("Failed to log error to the database:", dbError.message);
             }

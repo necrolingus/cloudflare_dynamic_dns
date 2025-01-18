@@ -28,7 +28,8 @@ async function updateCfIp(ip, dnsId) {
         }
         
         const response = await axios.put(`${url}${dnsId}`, data, { headers: headers })
-        return response.data.result
+        return "IP Updated Successfully"
+        //return response.data.result
 
     } catch (error) {
         console.log(error)
