@@ -54,8 +54,8 @@ async function main() {
         } catch (error) {
             //Handle potential DB errors
             try {
-                await ddnsUpdateData.create({publicIp: pubIp.ip, 
-                                            cloudflareIp: cfIp.ip,
+                await ddnsUpdateData.create({publicIp: null, 
+                                            cloudflareIp: null,
                                             publicIpService: null,
                                             updateOutcome: null, 
                                             error: error.message})
