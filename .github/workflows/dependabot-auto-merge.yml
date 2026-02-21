@@ -1,5 +1,7 @@
-name: Dependabot Auto-Merge (Immediate)
-on: pull_request
+name: Dependabot Auto-Merge
+on:
+  pull_request:
+  workflow_dispatch: # This adds the manual "Run workflow" button
 
 permissions:
   contents: write
@@ -8,20 +10,16 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    # Run if it's a Dependabot PR OR if you triggered it manually
+    if: github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch'
     steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v2
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-
-      - name: Approve and Merge
-        # This approves the PR first (often required by repo settings) 
-        # then merges it immediately.
+      - name: Approve and Merge Dependabot PRs
         run: |
-          gh pr review --approve "$PR_URL"
-          gh pr merge --merge --admin "$PR_URL"
+          # This command finds ALL open PRs from dependabot and merges them
+          for pr in $(gh pr list --author "app/dependabot" --json url --template '{{range .}}{{.url}} {{end}}'); do
+            echo "Merging $pr..."
+            gh pr review --approve "$pr"
+            gh pr merge --merge --admin "$pr"
+          done
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
