@@ -1,7 +1,7 @@
 name: Dependabot Auto-Merge
 on:
   pull_request:
-  workflow_dispatch: # This adds the manual "Run workflow" button
+  workflow_dispatch: 
 
 permissions:
   contents: write
@@ -10,12 +10,13 @@ permissions:
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    # Run if it's a Dependabot PR OR if you triggered it manually
     if: github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Approve and Merge Dependabot PRs
         run: |
-          # This command finds ALL open PRs from dependabot and merges them
           for pr in $(gh pr list --author "app/dependabot" --json url --template '{{range .}}{{.url}} {{end}}'); do
             echo "Merging $pr..."
             gh pr review --approve "$pr"
