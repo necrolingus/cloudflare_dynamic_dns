@@ -3,7 +3,7 @@ name: build_docker_image
 on:
   schedule:
     # Runs at 00:00 UTC every day (adjust time as needed)
-    - cron: '12 21 * * *'
+    - cron: '17 19 * * *'
   workflow_dispatch: # Keeps the manual button just in case
 
 jobs:
